@@ -1,4 +1,6 @@
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLabel, QMainWindow, QWidget
+import matplotlib.pyplot as plt
 import sys
 
 
@@ -21,7 +23,10 @@ class CraftAPlotApp(QMainWindow):
         self.layout.addWidget(QLabel("Settings Panel"))
 
     def init_plot_panel(self):
-        self.layout.addWidget(QLabel("Plot Panel"))
+        self.figure, self.ax = plt.subplots()
+        self.canvas = FigureCanvasQTAgg(self.figure)
+
+        self.layout.addWidget(self.canvas)
 
 
 def main():
