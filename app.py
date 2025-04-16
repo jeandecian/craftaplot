@@ -36,6 +36,7 @@ class CraftAPlotApp(QMainWindow):
         self.init_file_loading_layout()
         self.init_x_axis_selection_layout()
         self.init_y_axis_selection_layout()
+        self.init_plot_type_selection_layout()
 
         self.layout.addLayout(self.settings_layout)
 
@@ -72,6 +73,17 @@ class CraftAPlotApp(QMainWindow):
         self.y_axis_selection_layout.addWidget(self.y_axis_combo)
 
         self.settings_layout.addLayout(self.y_axis_selection_layout)
+
+    def init_plot_type_selection_layout(self):
+        self.plot_type_selection_layout = QHBoxLayout()
+
+        self.plot_type_selection_layout.addWidget(QLabel("Plot type:"))
+
+        self.plot_type_combo = QComboBox()
+        self.plot_type_combo.addItems(["bar", "plot", "scatter"])
+        self.plot_type_selection_layout.addWidget(self.plot_type_combo)
+
+        self.settings_layout.addLayout(self.plot_type_selection_layout)
 
     def init_plot_panel(self):
         self.figure, self.ax = plt.subplots()
