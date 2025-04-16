@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QVBoxLayout,
     QWidget,
@@ -30,6 +31,8 @@ class CraftAPlotApp(QMainWindow):
         self.init_settings_panel()
         self.init_plot_panel()
 
+        self.data = None
+
     def init_settings_panel(self):
         self.settings_layout = QVBoxLayout()
 
@@ -38,6 +41,7 @@ class CraftAPlotApp(QMainWindow):
         self.init_y_axis_selection_layout()
         self.init_plot_type_selection_layout()
         self.init_plot_library_selection_layout()
+        self.init_plot_button()
 
         self.layout.addLayout(self.settings_layout)
 
@@ -97,6 +101,12 @@ class CraftAPlotApp(QMainWindow):
 
         self.settings_layout.addLayout(self.plot_library_selection_layout)
 
+    def init_plot_button(self):
+        self.plot_button = QPushButton("Plot")
+        self.plot_button.clicked.connect(self.plot_data)
+
+        self.settings_layout.addWidget(self.plot_button)
+
     def init_plot_panel(self):
         self.figure, self.ax = plt.subplots()
         self.canvas = FigureCanvasQTAgg(self.figure)
@@ -122,6 +132,36 @@ class CraftAPlotApp(QMainWindow):
 
             self.y_axis_combo.clear()
             self.y_axis_combo.addItems(self.data.columns)
+
+    def plot_data(self):
+        if self.data is not None:
+            x_axis_combo = self.x_axis_combo.currentText()
+            y_axis_combo = self.y_axis_combo.currentText()
+            plot_type = self.plot_type_combo.currentText()
+            library = self.library_combo.currentText()
+
+            self.ax.clear()
+
+            if plot_type == "bar":
+                if library == "Matplotlib":
+                    self.ax.bar(self.data[x_axis_combo], self.data[y_axis_combo])
+            elif plot_type == "plot":
+                if library == "Matplotlib":
+                    self.ax.plot(self.data[x_axis_combo], self.data[y_axis_combo])
+            elif plot_type == "scatter":
+                if library == "Matplotlib":
+                    self.ax.scatter(self.data[x_axis_combo], self.data[y_axis_combo])
+
+            self.ax.set_xlabel(x_axis_combo)
+            self.ax.set_ylabel(y_axis_combo)
+
+            self.ax.set_title(
+                f"{plot_type.capitalize()} plot of {y_axis_combo} vs {x_axis_combo}"
+            )
+            self.canvas.draw()
+
+        else:
+            QMessageBox.warning(self, "Warning", "Please load a file first.")
 
 
 def main():
