@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (
 )
 import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 import sys
 
 
@@ -96,7 +97,7 @@ class CraftAPlotApp(QMainWindow):
         self.plot_library_selection_layout.addWidget(QLabel("Plot library:"))
 
         self.library_combo = QComboBox()
-        self.library_combo.addItems(["Matplotlib"])
+        self.library_combo.addItems(["Matplotlib", "Seaborn"])
         self.plot_library_selection_layout.addWidget(self.library_combo)
 
         self.settings_layout.addLayout(self.plot_library_selection_layout)
@@ -145,12 +146,24 @@ class CraftAPlotApp(QMainWindow):
             if plot_type == "bar":
                 if library == "Matplotlib":
                     self.ax.bar(self.data[x_axis_combo], self.data[y_axis_combo])
+                elif library == "Seaborn":
+                    sns.barplot(
+                        x=self.data[x_axis_combo], y=self.data[y_axis_combo], ax=self.ax
+                    )
             elif plot_type == "plot":
                 if library == "Matplotlib":
                     self.ax.plot(self.data[x_axis_combo], self.data[y_axis_combo])
+                elif library == "Seaborn":
+                    sns.lineplot(
+                        x=self.data[x_axis_combo], y=self.data[y_axis_combo], ax=self.ax
+                    )
             elif plot_type == "scatter":
                 if library == "Matplotlib":
                     self.ax.scatter(self.data[x_axis_combo], self.data[y_axis_combo])
+                elif library == "Seaborn":
+                    sns.scatterplot(
+                        x=self.data[x_axis_combo], y=self.data[y_axis_combo], ax=self.ax
+                    )
 
             self.ax.set_xlabel(x_axis_combo)
             self.ax.set_ylabel(y_axis_combo)
