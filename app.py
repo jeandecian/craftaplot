@@ -1,5 +1,14 @@
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from PyQt5.QtWidgets import QApplication, QHBoxLayout, QLabel, QMainWindow, QWidget
+from PyQt5.QtWidgets import (
+    QApplication,
+    QFileDialog,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 import matplotlib.pyplot as plt
 import sys
 
@@ -20,13 +29,43 @@ class CraftAPlotApp(QMainWindow):
         self.init_plot_panel()
 
     def init_settings_panel(self):
-        self.layout.addWidget(QLabel("Settings Panel"))
+        self.settings_layout = QVBoxLayout()
+
+        self.init_file_loading_layout()
+
+        self.layout.addLayout(self.settings_layout)
+
+    def init_file_loading_layout(self):
+        self.file_loading_layout = QHBoxLayout()
+
+        self.file_loading_layout.addWidget(QLabel("File:"))
+
+        self.file_path_label = QLabel("No file selected")
+        self.file_loading_layout.addWidget(self.file_path_label)
+
+        self.file_loading_button = QPushButton("Load file")
+        self.file_loading_button.clicked.connect(self.load_file)
+        self.file_loading_layout.addWidget(self.file_loading_button)
+
+        self.settings_layout.addLayout(self.file_loading_layout)
 
     def init_plot_panel(self):
         self.figure, self.ax = plt.subplots()
         self.canvas = FigureCanvasQTAgg(self.figure)
 
         self.layout.addWidget(self.canvas)
+
+    def load_file(self):
+        file_name, _ = QFileDialog.getOpenFileName(
+            self,
+            "Load CSV File",
+            "",
+            "CSV Files (*.csv);;All Files (*)",
+            options=QFileDialog.Options(),
+        )
+
+        if file_name:
+            self.file_path_label.setText(file_name)
 
 
 def main():
