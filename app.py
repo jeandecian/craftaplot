@@ -37,6 +37,7 @@ class CraftAPlotApp(QMainWindow):
         self.init_x_axis_selection_layout()
         self.init_y_axis_selection_layout()
         self.init_plot_type_selection_layout()
+        self.init_plot_library_selection_layout()
 
         self.layout.addLayout(self.settings_layout)
 
@@ -84,6 +85,17 @@ class CraftAPlotApp(QMainWindow):
         self.plot_type_selection_layout.addWidget(self.plot_type_combo)
 
         self.settings_layout.addLayout(self.plot_type_selection_layout)
+
+    def init_plot_library_selection_layout(self):
+        self.plot_library_selection_layout = QHBoxLayout()
+
+        self.plot_library_selection_layout.addWidget(QLabel("Plot library:"))
+
+        self.library_combo = QComboBox()
+        self.library_combo.addItems(["Matplotlib"])
+        self.plot_library_selection_layout.addWidget(self.library_combo)
+
+        self.settings_layout.addLayout(self.plot_library_selection_layout)
 
     def init_plot_panel(self):
         self.figure, self.ax = plt.subplots()
